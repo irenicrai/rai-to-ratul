@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- State & Storage ---
     const state = {
-        friendName: localStorage.getItem('ff_friendName') || 'Ratul',
-        yourName: localStorage.getItem('ff_yourName') || 'Rai',
+        friendName: 'Ratul',
+        yourName: 'Rai',
         hugCount: parseInt(localStorage.getItem('ff_hugCount')) || 108,
         isPlayingAudio: false,
         audioContext: null,
@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Toast Notification System ---
     function showToast(message, icon = 'fa-heart') {
+        if (!elements.toastContainer) return;
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
@@ -91,9 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic Name Personalization ---
     function updateNames() {
-        elements.friendNameTexts.forEach(el => el.textContent = state.friendName);
-        elements.friendNameInput.value = state.friendName;
-        elements.yourNameInput.value = state.yourName;
+        if (elements.friendNameTexts) {
+            elements.friendNameTexts.forEach(el => el.textContent = state.friendName);
+        }
+        if (elements.friendNameInput) elements.friendNameInput.value = state.friendName;
+        if (elements.yourNameInput) elements.yourNameInput.value = state.yourName;
         
         // Update direct messaging links if present
         const defaultMsg = encodeURIComponent(`Hey ${state.friendName}! ${state.yourName} here sending love! Hope your work is going awesome today! <3`);
@@ -101,21 +104,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (elements.tgLauncher) elements.tgLauncher.href = `https://t.me/share/url?url=&text=${defaultMsg}`;
     }
 
-    // Personalize Modal Events
-    elements.customizeBtn.addEventListener('click', () => elements.customizeModal.classList.add('active'));
-    elements.closeModalBtn.addEventListener('click', () => elements.customizeModal.classList.remove('active'));
-    elements.saveCustomizeBtn.addEventListener('click', () => {
-        state.friendName = elements.friendNameInput.value.trim() || 'Ratul';
-        state.yourName = elements.yourNameInput.value.trim() || 'Rai';
-        localStorage.setItem('ff_friendName', state.friendName);
-        localStorage.setItem('ff_yourName', state.yourName);
-        updateNames();
-        elements.customizeModal.classList.remove('active');
-        showToast('Personalized names updated!', 'fa-user-check');
-    });
+    // Personalize Modal Events (Safely Guarded)
+    if (elements.customizeBtn && elements.customizeModal) {
+        elements.customizeBtn.addEventListener('click', () => elements.customizeModal.classList.add('active'));
+    }
+    if (elements.closeModalBtn && elements.customizeModal) {
+        elements.closeModalBtn.addEventListener('click', () => elements.customizeModal.classList.remove('active'));
+    }
+    if (elements.saveCustomizeBtn) {
+        elements.saveCustomizeBtn.addEventListener('click', () => {
+            if (elements.friendNameInput) state.friendName = elements.friendNameInput.value.trim() || 'Ratul';
+            if (elements.yourNameInput) state.yourName = elements.yourNameInput.value.trim() || 'Rai';
+            localStorage.setItem('ff_friendName', state.friendName);
+            localStorage.setItem('ff_yourName', state.yourName);
+            updateNames();
+            if (elements.customizeModal) elements.customizeModal.classList.remove('active');
+            showToast('Personalized names updated!', 'fa-user-check');
+        });
+    }
 
     // --- Hug Counter & Floating Hearts Particles ---
-    elements.hugCountDisplay.textContent = state.hugCount;
+    if (elements.hugCountDisplay) elements.hugCountDisplay.textContent = state.hugCount;
 
     function createFloatingHeart(x, y) {
         const heart = document.createElement('div');
@@ -135,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerHugShower(e) {
         state.hugCount += 1;
-        state.hugCountDisplay.textContent = state.hugCount;
+        if (elements.hugCountDisplay) elements.hugCountDisplay.textContent = state.hugCount;
         localStorage.setItem('ff_hugCount', state.hugCount);
 
         const rect = e ? e.target.getBoundingClientRect() : null;
@@ -153,16 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(`Virtual Hug sent from Rai to ${state.friendName}! ❤️`, 'fa-heart');
     }
 
-    elements.hugBtn.addEventListener('click', triggerHugShower);
-    elements.triggerHeartShower.addEventListener('click', () => {
-        for(let i = 0; i < 20; i++) {
-            setTimeout(() => createFloatingHeart(Math.random() * window.innerWidth, window.innerHeight - 100), i * 120);
-        }
-        playChimeSound();
-        showToast('Infinite Heart Wave Sent from Rai to Ratul! ✨', 'fa-sparkles');
-    });
+    if (elements.hugBtn) elements.hugBtn.addEventListener('click', triggerHugShower);
+    if (elements.triggerHeartShower) {
+        elements.triggerHeartShower.addEventListener('click', () => {
+            for(let i = 0; i < 20; i++) {
+                setTimeout(() => createFloatingHeart(Math.random() * window.innerWidth, window.innerHeight - 100), i * 120);
+            }
+            playChimeSound();
+            showToast('Infinite Heart Wave Sent from Rai to Ratul! ✨', 'fa-sparkles');
+        });
+    }
 
-    // --- Web Audio Synthesizer (Lofi Ambient Music & Chimes) ---
+    // --- Web Audio Synthesizer (Chimes) ---
     function playChimeSound() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -194,38 +205,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    if (firstScriptTag && firstScriptTag.parentNode) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
 
     window.onYouTubeIframeAPIReady = function() {
-        ytPlayer = new YT.Player('ytPlayer', {
-            height: '160',
-            width: '100%',
-            videoId: 'Qh2rvERynRo', // Tumi - Bengali Song
-            playerVars: {
-                'playsinline': 1,
-                'controls': 1,
-                'rel': 0,
-                'modestbranding': 1
-            },
-            events: {
-                'onReady': () => { ytPlayerReady = true; },
-                'onStateChange': (e) => {
-                    if (e.data === YT.PlayerState.PLAYING) {
-                        state.isPlayingAudio = true;
-                        elements.soundToggleBtn.classList.add('playing');
-                        if (elements.audioPlayToggle) {
-                            elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-pause"></i> Pause Tumi';
-                        }
-                    } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-                        state.isPlayingAudio = false;
-                        elements.soundToggleBtn.classList.remove('playing');
-                        if (elements.audioPlayToggle) {
-                            elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-play"></i> Play Tumi';
+        try {
+            ytPlayer = new YT.Player('ytPlayer', {
+                height: '160',
+                width: '100%',
+                videoId: 'Qh2rvERynRo', // Tumi - Bengali Song
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 1,
+                    'rel': 0,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': () => { ytPlayerReady = true; },
+                    'onStateChange': (e) => {
+                        if (e.data === YT.PlayerState.PLAYING) {
+                            state.isPlayingAudio = true;
+                            if (elements.soundToggleBtn) elements.soundToggleBtn.classList.add('playing');
+                            if (elements.audioPlayToggle) {
+                                elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-pause"></i> Pause Tumi';
+                            }
+                        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+                            state.isPlayingAudio = false;
+                            if (elements.soundToggleBtn) elements.soundToggleBtn.classList.remove('playing');
+                            if (elements.audioPlayToggle) {
+                                elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-play"></i> Play Tumi';
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        } catch(err) {
+            console.log("YT Player init note:", err);
+        }
     };
 
     function toggleTumi() {
@@ -233,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bgAudio && bgAudio.currentTime > 0 && !bgAudio.paused) {
             bgAudio.pause();
             state.isPlayingAudio = false;
-            elements.soundToggleBtn.classList.remove('playing');
+            if (elements.soundToggleBtn) elements.soundToggleBtn.classList.remove('playing');
             if (elements.audioPlayToggle) elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-play"></i> Play Tumi';
             showToast('Tumi paused', 'fa-pause');
             return;
@@ -253,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback HTML5 audio
             bgAudio.play().then(() => {
                 state.isPlayingAudio = true;
-                elements.soundToggleBtn.classList.add('playing');
+                if (elements.soundToggleBtn) elements.soundToggleBtn.classList.add('playing');
                 if (elements.audioPlayToggle) elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-pause"></i> Pause Tumi';
                 showToast('Playing Tumi 🎵', 'fa-music');
             }).catch(() => {
@@ -272,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgAudio.src = fileURL;
                 bgAudio.play().then(() => {
                     state.isPlayingAudio = true;
-                    elements.soundToggleBtn.classList.add('playing');
+                    if (elements.soundToggleBtn) elements.soundToggleBtn.classList.add('playing');
                     if (elements.audioPlayToggle) {
                         elements.audioPlayToggle.innerHTML = '<i class="fa-solid fa-pause"></i> Pause Song';
                     }
@@ -284,15 +301,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    elements.soundToggleBtn.addEventListener('click', toggleTumi);
+    if (elements.soundToggleBtn) elements.soundToggleBtn.addEventListener('click', toggleTumi);
     if (elements.audioPlayToggle) elements.audioPlayToggle.addEventListener('click', toggleTumi);
-    elements.volumeSlider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        if (bgAudio) bgAudio.volume = val;
-        if (state.soundGain && state.audioContext) {
-            state.soundGain.gain.setValueAtTime(val, state.audioContext.currentTime);
-        }
-    });
+    if (elements.volumeSlider) {
+        elements.volumeSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (bgAudio) bgAudio.volume = val;
+            if (state.soundGain && state.audioContext) {
+                state.soundGain.gain.setValueAtTime(val, state.audioContext.currentTime);
+            }
+        });
+    }
 
     // --- Digital Encouragement Jar Note Drawer ---
     let isDrawingNote = false;
@@ -364,40 +383,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const drawBtnEl = document.getElementById('drawNoteBtn');
     const jarEl = document.getElementById('digitalJar');
     if (drawBtnEl) {
-        drawBtnEl.onclick = null; // Clear inline handler to prevent double execution
+        drawBtnEl.onclick = null;
         drawBtnEl.addEventListener('click', (e) => {
             e.preventDefault();
             drawNote();
         });
     }
     if (jarEl) {
-        jarEl.onclick = null; // Clear inline handler to prevent double execution
+        jarEl.onclick = null;
         jarEl.addEventListener('click', (e) => {
             e.preventDefault();
             drawNote();
         });
     }
 
-    // Initial note draw on page load so it's ready
+    // Initial note draw on page load
     drawNote();
+
     if (elements.shareNoteBtn) {
         elements.shareNoteBtn.addEventListener('click', () => {
-            const textToCopy = elements.noteText.textContent;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast('Note copied to clipboard!', 'fa-copy');
-            });
+            const textToCopy = elements.noteText ? elements.noteText.textContent : '';
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showToast('Note copied to clipboard!', 'fa-copy');
+                });
+            }
         });
     }
 
     // --- One-Tap Preset Text Copier ---
-    elements.presetBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const text = btn.getAttribute('data-text');
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Preset text copied! Ready to send.', 'fa-paper-plane');
+    if (elements.presetBtns) {
+        elements.presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.getAttribute('data-text');
+                if (text) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('Preset text copied! Ready to send.', 'fa-paper-plane');
+                    });
+                }
             });
         });
-    });
+    }
 
     // Copy App Link
     if (elements.copyCustomLinkBtn) {
@@ -409,17 +435,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Copy Personal Letter
-    elements.copyLetterBtn.addEventListener('click', () => {
-        const letterText = document.querySelector('.letter-body').innerText;
-        navigator.clipboard.writeText(letterText).then(() => {
-            showToast('Personal letter copied to clipboard!', 'fa-envelope');
+    if (elements.copyLetterBtn) {
+        elements.copyLetterBtn.addEventListener('click', () => {
+            const letterEl = document.querySelector('.letter-body');
+            if (letterEl) {
+                navigator.clipboard.writeText(letterEl.innerText).then(() => {
+                    showToast('Personal letter copied to clipboard!', 'fa-envelope');
+                });
+            }
         });
-    });
+    }
 
     // --- Interactive Constellation Star Canvas (Rai ↔ Ratul Nodes) ---
     function initStarCanvas() {
         const canvas = elements.starCanvas;
+        if (!canvas) return;
         const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
@@ -497,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
 
-    // Clear old localStorage values to enforce clean Rai & Ratul names
+    // Enforce clean Rai & Ratul names
     localStorage.setItem('ff_friendName', 'Ratul');
     localStorage.setItem('ff_yourName', 'Rai');
 
