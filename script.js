@@ -296,46 +296,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Digital Encouragement Jar Note Drawer ---
     function drawNote() {
-        if (!elements.noteCard) return;
+        const noteCard = document.getElementById('noteCard');
+        const noteText = document.getElementById('noteText');
+        const noteNumber = document.getElementById('noteNumber');
+        const noteCategory = document.getElementById('noteCategory');
+        const digitalJar = document.getElementById('digitalJar');
 
-        // Pick next or random note
-        const randomIndex = Math.floor(Math.random() * state.notes.length);
-        state.currentNoteIndex = (randomIndex === state.currentNoteIndex) ? (randomIndex + 1) % state.notes.length : randomIndex;
+        if (!noteText || !noteCard) return;
+
+        // Pick next random note index guaranteed to be different
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * state.notes.length);
+        } while (nextIndex === state.currentNoteIndex && state.notes.length > 1);
+        
+        state.currentNoteIndex = nextIndex;
         const current = state.notes[state.currentNoteIndex];
 
-        // Animate card scale & pop
-        elements.noteCard.style.transform = 'scale(0.92)';
-        elements.noteCard.style.opacity = '0.5';
+        // Update DOM elements instantly
+        if (noteNumber) noteNumber.textContent = state.currentNoteIndex + 1;
+        if (noteCategory) noteCategory.textContent = current.cat;
+        if (noteText) noteText.textContent = `"${current.text}"`;
+
+        // Trigger visual pulse animation
+        noteCard.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease';
+        noteCard.style.transform = 'scale(1.05)';
+        noteCard.style.opacity = '1';
 
         setTimeout(() => {
-            elements.noteNumber.textContent = state.currentNoteIndex + 1;
-            elements.noteCategory.textContent = current.cat;
-            elements.noteText.textContent = `"${current.text}"`;
+            noteCard.style.transform = 'scale(1)';
+        }, 200);
 
-            elements.noteCard.style.transform = 'scale(1.03)';
-            elements.noteCard.style.opacity = '1';
-
-            setTimeout(() => {
-                elements.noteCard.style.transform = 'scale(1)';
-            }, 150);
-
-            // Spawn floating star particles from the jar
-            if (elements.digitalJar) {
-                const jarRect = elements.digitalJar.getBoundingClientRect();
-                for (let i = 0; i < 5; i++) {
-                    createFloatingHeart(jarRect.left + jarRect.width / 2 + (Math.random() * 60 - 30), jarRect.top + 20);
-                }
+        // Burst particle hearts from the jar
+        if (digitalJar) {
+            const jarRect = digitalJar.getBoundingClientRect();
+            const jarX = jarRect.left + jarRect.width / 2;
+            const jarY = jarRect.top + 20;
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    createFloatingHeart(jarX + (Math.random() * 80 - 40), jarY);
+                }, i * 60);
             }
+        }
 
-            playChimeSound();
-        }, 150);
+        playChimeSound();
     }
 
-    // Expose drawNote globally for inline onclick
+    // Expose drawNote globally on window for inline onclick
     window.drawNote = drawNote;
 
-    if (elements.drawNoteBtn) elements.drawNoteBtn.addEventListener('click', drawNote);
-    if (elements.digitalJar) elements.digitalJar.addEventListener('click', drawNote);
+    const drawBtnEl = document.getElementById('drawNoteBtn');
+    const jarEl = document.getElementById('digitalJar');
+    if (drawBtnEl) drawBtnEl.addEventListener('click', drawNote);
+    if (jarEl) jarEl.addEventListener('click', drawNote);
+
+    // Initial note draw on page load so it's ready
+    drawNote();
     elements.shareNoteBtn.addEventListener('click', () => {
         const textToCopy = elements.noteText.textContent;
         navigator.clipboard.writeText(textToCopy).then(() => {
