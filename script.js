@@ -296,18 +296,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Digital Encouragement Jar Note Drawer ---
     function drawNote() {
-        elements.noteCard.classList.add('flip-anim');
+        if (!elements.noteCard) return;
+
+        // Pick next or random note
+        const randomIndex = Math.floor(Math.random() * state.notes.length);
+        state.currentNoteIndex = (randomIndex === state.currentNoteIndex) ? (randomIndex + 1) % state.notes.length : randomIndex;
+        const current = state.notes[state.currentNoteIndex];
+
+        // Animate card scale & pop
+        elements.noteCard.style.transform = 'scale(0.92)';
+        elements.noteCard.style.opacity = '0.5';
+
         setTimeout(() => {
-            state.currentNoteIndex = (state.currentNoteIndex + 1) % state.notes.length;
-            const current = state.notes[state.currentNoteIndex];
-            
             elements.noteNumber.textContent = state.currentNoteIndex + 1;
             elements.noteCategory.textContent = current.cat;
             elements.noteText.textContent = `"${current.text}"`;
-            
-            elements.noteCard.classList.remove('flip-anim');
+
+            elements.noteCard.style.transform = 'scale(1.03)';
+            elements.noteCard.style.opacity = '1';
+
+            setTimeout(() => {
+                elements.noteCard.style.transform = 'scale(1)';
+            }, 150);
+
+            // Spawn floating star particles from the jar
+            if (elements.digitalJar) {
+                const jarRect = elements.digitalJar.getBoundingClientRect();
+                for (let i = 0; i < 5; i++) {
+                    createFloatingHeart(jarRect.left + jarRect.width / 2 + (Math.random() * 60 - 30), jarRect.top + 20);
+                }
+            }
+
             playChimeSound();
-        }, 300);
+        }, 150);
     }
 
     elements.drawNoteBtn.addEventListener('click', drawNote);
