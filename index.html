@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rai to Ratul | Connected Forever ∞</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Constellation Canvas Background -->
+    <canvas id="starCanvas"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <span class="infinity-icon">∞</span>
+                <span class="brand-text">Rai ↔ Ratul</span>
+                <div class="online-indicator">
+                    <span class="pulse-dot"></span>
+                    <span class="indicator-text">Hotline Always Open</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#hero" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#cross-border" class="nav-item"><i class="fa-solid fa-earth-asia"></i> Rai & Ratul Sync</a>
+                <a href="#hotline" class="nav-item"><i class="fa-solid fa-comments"></i> Hotline Vows</a>
+                <a href="#safe-space" class="nav-item"><i class="fa-solid fa-mug-hot"></i> Work Support</a>
+                <a href="#jar" class="nav-item"><i class="fa-solid fa-jar"></i> Care Jar</a>
+                <a href="#letter" class="nav-item"><i class="fa-solid fa-envelope-open-text"></i> My Letter</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="soundToggleBtn" class="audio-btn" title="Play Tumi">
+                    <i class="fa-solid fa-music"></i>
+                    <span class="sound-wave">
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="sound-label">Tumi</span>
+                </button>
+                <button id="customizeBtn" class="pill-btn secondary" title="Customize Names">
+                    <i class="fa-solid fa-sliders"></i> Personalize
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="content-wrapper">
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-badge">
+                <span>Rai</span> <i class="fa-solid fa-heart gradient-heart"></i> <span>Ratul</span> • Unbreakable Bond
+            </div>
+
+            <h1 class="hero-title">
+                Ratul, Never Close Our Conversation. <br>
+                <span class="gradient-text">I am always here for you, always.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                I know how hard you are working in Bangladesh right now, giving your all every single day. 
+                No matter the distance across borders, rivers, or time zones—my door is 
+                <strong>100% open for you, anytime, feel free to text me 24/7</strong>.
+            </p>
+
+            <div class="hero-actions">
+                <button id="hugBtn" class="pill-btn primary glow-btn">
+                    <i class="fa-solid fa-heart"></i> Send Ratul a Virtual Hug
+                </button>
+                <a href="#letter" class="pill-btn outline">
+                    <i class="fa-solid fa-book-open"></i> Read My Letter &lt;3
+                </a>
+            </div>
+
+            <!-- Virtual Hug Counter Badge -->
+            <div class="hug-counter-card glass-panel">
+                <div class="hug-icon-box">
+                    <i class="fa-solid fa-face-smile-beam"></i>
+                </div>
+                <div class="hug-info">
+                    <div class="hug-count-number"><span id="hugCount">108</span> Hugs Sent from Rai to Ratul</div>
+                    <div class="hug-subtext">Click the button above to shower hearts from India right to Bangladesh!</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Cross-Border Time & Distance Sync Widget -->
+        <section id="cross-border" class="connection-banner glass-panel">
+            <div class="cross-border-container">
+                <div class="location-card glass-panel">
+                    <div class="flag-badge">Rai (India)</div>
+                    <div class="city-name">Rai's Local Time (IST)</div>
+                    <div id="indiaTime" class="live-clock">12:00:00 PM</div>
+                    <div class="time-sub">UTC +5:30</div>
+                </div>
+
+                <div class="bridge-visual">
+                    <div class="bridge-line">
+                        <span class="pulse-beam"></span>
+                    </div>
+                    <div class="distance-badge">
+                        <i class="fa-solid fa-infinity"></i>
+                        <span>Just 30 min difference • 0 miles in heart</span>
+                    </div>
+                </div>
+
+                <div class="location-card glass-panel">
+                    <div class="flag-badge">Ratul (Bangladesh)</div>
+                    <div class="city-name">Ratul's Local Time (BST)</div>
+                    <div id="bdTime" class="live-clock">12:30:00 PM</div>
+                    <div class="time-sub">UTC +6:00</div>
+                </div>
+            </div>
+
+            <div class="constellation-preview">
+                <img src="assets/forever_friendship_constellation.jpg" alt="Two constellations connected by light ribbon" class="banner-img">
+                <div class="banner-overlay">
+                    <div class="banner-tag"><i class="fa-solid fa-earth-asia"></i> Rai ↔ Ratul Friendship Bridge</div>
+                    <h2>"Borders may separate countries, but our bonding knows no boundaries."</h2>
+                    <p>No matter where work takes you in Bangladesh, Ratul, remember that Rai in India is always cheering for you, supporting your hustle, and ready to chat anytime.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: The "Never Close Conversation" Guarantee -->
+        <section id="hotline" class="section-container">
+            <div class="section-header">
+                <div class="section-badge"><i class="fa-solid fa-headset"></i> Cross-Border Hotline Guarantee</div>
+                <h2 class="section-title">Rules of Our Friendship: <span class="gradient-text">No Expiration Date</span></h2>
+                <p class="section-desc">Ratul, you never have to apologize for being busy, tired, or taking time to reply. Here is Rai's vow to you:</p>
+            </div>
+
+            <div class="hotline-grid">
+                <!-- Vow Card 1 -->
+                <div class="vow-card glass-panel">
+                    <div class="vow-icon"><i class="fa-solid fa-door-open"></i></div>
+                    <h3>Conversation is Always Open</h3>
+                    <p>Do not ever close our conversation! Whether it's 3 AM, late after work, random thoughts, or memes—text me anytime without hesitation.</p>
+                    <div class="card-tag">Vow #1</div>
+                </div>
+
+                <!-- Vow Card 2 -->
+                <div class="vow-card glass-panel">
+                    <div class="vow-icon"><i class="fa-solid fa-battery-half"></i></div>
+                    <h3>Zero Reply Pressure</h3>
+                    <p>I know how hard you're working right now, Ratul. Reply when you can—5 minutes or 5 days later. My friendship comes with absolute understanding.</p>
+                    <div class="card-tag">Vow #2</div>
+                </div>
+
+                <!-- Vow Card 3 -->
+                <div class="vow-card glass-panel">
+                    <div class="vow-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h3>Rai Supports Your Hustle 100%</h3>
+                    <p>I admire how hard you hustle in Bangladesh. I am always in your corner, celebrating your achievements and supporting you anyway!</p>
+                    <div class="card-tag">Vow #3</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Work Support & Safe Space Station -->
+        <section id="safe-space" class="section-container">
+            <div class="safe-space-card glass-panel">
+                <div class="safe-space-content">
+                    <div class="section-badge"><i class="fa-solid fa-shield-heart"></i> Hard Work Support Station</div>
+                    <h2 class="section-title">For When Work Gets <span class="gradient-text">Heavy & Draining</span></h2>
+                    <p class="section-desc">I know how intense your work schedule can get in Bangladesh, Ratul. Whenever you feel overwhelmed, tap these support notes or play our relaxing background ambiance:</p>
+
+                    <div class="accordion-list">
+                        <details class="accordion-item" open>
+                            <summary>
+                                <span class="acc-title"><i class="fa-solid fa-mug-hot"></i> When work is piling up & you're feeling tired</span>
+                                <i class="fa-solid fa-chevron-down acc-icon"></i>
+                            </summary>
+                            <div class="acc-body">
+                                Ratul, take a moment right now. Relax your shoulders, unclench your jaw, and take 3 deep breaths. You are working so hard, but remember that your peace and health come before any task list!
+                            </div>
+                        </details>
+
+                        <details class="accordion-item">
+                            <summary>
+                                <span class="acc-title"><i class="fa-solid fa-brain"></i> When you feel stressed or doubt yourself</span>
+                                <i class="fa-solid fa-chevron-down acc-icon"></i>
+                            </summary>
+                            <div class="acc-body">
+                                Look at how much you have already achieved, Ratul. I believe in your capability, intelligence, and bright future even on days when you feel exhausted.
+                            </div>
+                        </details>
+
+                        <details class="accordion-item">
+                            <summary>
+                                <span class="acc-title"><i class="fa-solid fa-clock-rotate-left"></i> When you feel guilty for taking time to text back</span>
+                                <i class="fa-solid fa-chevron-down acc-icon"></i>
+                            </summary>
+                            <div class="acc-body">
+                                Never feel guilty! Real friendship between Rai and Ratul doesn't need constant checking in; it is built on eternal trust, zero pressure, and forever support.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Tumi Official Spotify Song Player -->
+                    <audio id="bgMusic" loop preload="auto">
+                        <source src="assets/tumi.mp3" type="audio/mpeg">
+                        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
+                    </audio>
+                    <div class="audio-control-panel">
+                        <div class="audio-info">
+                            <i class="fa-brands fa-spotify gradient-icon" style="color: #1DB954;"></i>
+                            <div>
+                                <strong>🎵 Tumi (তুমি) — Special Song</strong>
+                                <p>Dedicated Song for Ratul & Rai</p>
+                            </div>
+                        </div>
+
+                        <!-- Spotify Embedded Player Frame -->
+                        <div class="spotify-player-box">
+                            <iframe style="border-radius:16px" 
+                                src="https://open.spotify.com/embed/track/7iSWYBp3QGl3eQyv8l40hs?utm_source=generator&theme=0" 
+                                width="100%" height="152" frameBorder="0" allowfullscreen="" 
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                                loading="lazy"></iframe>
+                        </div>
+
+                        <div class="audio-actions-row">
+                            <a href="https://open.spotify.com/track/7iSWYBp3QGl3eQyv8l40hs" target="_blank" class="pill-btn primary glow-btn">
+                                <i class="fa-brands fa-spotify"></i> Open in Spotify App
+                            </a>
+
+                            <label for="mp3FileInput" class="pill-btn secondary file-upload-label" title="Upload your Tumi MP3 file">
+                                <i class="fa-solid fa-file-audio"></i> Choose Local MP3
+                            </label>
+                            <input type="file" id="mp3FileInput" accept="audio/*" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="safe-space-image-box">
+                    <img src="assets/ratul_rai_videocall.png" alt="Ratul and Rai Video Call Memory" class="support-img floating-support-img">
+                    <div class="image-quote">
+                        "Your hard work will pay off, Ratul, but your well-being matters most right now. Take care of yourself."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Interactive Encouragement Jar -->
+        <section id="jar" class="section-container">
+            <div class="section-header">
+                <div class="section-badge"><i class="fa-solid fa-sparkles"></i> Daily Pick-Me-Up</div>
+                <h2 class="section-title">The Digital <span class="gradient-text">Encouragement Jar</span></h2>
+                <p class="section-desc">Whenever you need a smile during a long work day, Ratul, tap the jar below to draw a capsule note!</p>
+            </div>
+
+            <div class="jar-interactive-area glass-panel">
+                <div class="jar-visual-container">
+                    <div id="digitalJar" class="digital-jar">
+                        <div class="jar-lid"></div>
+                        <div class="jar-neck"></div>
+                        <div class="jar-body">
+                            <div class="capsule cap-1"><i class="fa-solid fa-heart"></i></div>
+                            <div class="capsule cap-2"><i class="fa-solid fa-star"></i></div>
+                            <div class="capsule cap-3"><i class="fa-solid fa-sun"></i></div>
+                            <div class="capsule cap-4"><i class="fa-solid fa-cloud-moon"></i></div>
+                            <div class="capsule cap-5"><i class="fa-solid fa-face-smile"></i></div>
+                        </div>
+                    </div>
+                    <button id="drawNoteBtn" class="pill-btn primary glow-btn">
+                        <i class="fa-solid fa-hand-holding-sparkles"></i> Open a Capsule Note
+                    </button>
+                </div>
+
+                <div class="note-display-area">
+                    <div id="noteCard" class="note-card glass-panel">
+                        <div class="note-header">
+                            <span class="note-tag"><i class="fa-solid fa-quote-left"></i> Capsule #<span id="noteNumber">1</span></span>
+                            <span id="noteCategory" class="note-category">Daily Boost</span>
+                        </div>
+                        <div id="noteText" class="note-text">
+                            "Click the button on the left to draw a note full of support and love!"
+                        </div>
+                        <div class="note-footer">
+                            <span class="note-signature">— Always in your corner, Rai ❤️</span>
+                            <button id="shareNoteBtn" class="icon-btn-text" title="Copy this note">
+                                <i class="fa-regular fa-copy"></i> Copy Note
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Personal Handwritten Letter -->
+        <section id="letter" class="section-container">
+            <div class="letter-wrapper glass-panel">
+                <div class="letter-header">
+                    <div class="wax-seal">
+                        <span>∞</span>
+                    </div>
+                    <div class="letter-meta">
+                        <div class="letter-to">To My Best Friend Ratul (<span class="friend-name-text">Ratul</span>),</div>
+                        <div class="letter-date">Written with unconditional love by Rai for Ratul</div>
+                    </div>
+                </div>
+
+                <div class="letter-body">
+                    <p class="letter-opening">Dear Ratul,</p>
+                    
+                    <p>I wanted to create this website specifically for you as a permanent sanctuary—a place you can come back to whenever you're feeling exhausted from work, stressed, or just need a reminder that Rai in India is always thinking of you.</p>
+
+                    <p>I know how insanely hard you are working right now in Bangladesh. I see your dedication, your resilience, and your passion. I support you 100% in everything you do, and I am so proud to call you my best friend.</p>
+
+                    <p>Most importantly, Ratul, please remember this promise: <strong>Do not ever close our conversation.</strong></p>
+
+                    <p>No matter how busy your days get, how tired you feel, or how much distance separates India and Bangladesh, our bonding is meant to be forever. Always feel free to text me anytime—whether it’s to share a win, vent about a tough day, or just send a single emoji. You can NEVER bother me.</p>
+
+                    <p>Work hard, stay healthy, drink water, and know that Rai is always right here for you. Always.</p>
+
+                    <p class="letter-closing">
+                        Sending endless support & hugs across the miles,<br>
+                        <strong class="letter-signature">Your Best Friend Forever &lt;3,<br>Rai</strong>
+                    </p>
+                </div>
+
+                <div class="letter-footer-actions">
+                    <button id="copyLetterBtn" class="pill-btn secondary">
+                        <i class="fa-solid fa-copy"></i> Copy Personal Letter
+                    </button>
+                    <button id="triggerHeartShower" class="pill-btn primary glow-btn">
+                        <i class="fa-solid fa-heart-pulse"></i> Send Heart Wave to Ratul
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Customization Modal -->
+    <div id="customizeModal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-pen"></i> Personalize This Site</h3>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label for="friendNameInput">Your Friend's Name:</label>
+                    <input type="text" id="friendNameInput" placeholder="e.g. Ratul" value="Ratul">
+                </div>
+                <div class="input-group">
+                    <label for="yourNameInput">Your Name:</label>
+                    <input type="text" id="yourNameInput" placeholder="e.g. Rai" value="Rai">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveCustomizeBtn" class="pill-btn primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span>Rai ↔ Ratul</span> Forever Bonded
+            </div>
+            <p>Built with endless warmth, love, and support by Rai for Ratul.</p>
+            <div class="footer-note">Borders mean nothing when friendship is eternal. Always feel free to text anytime &lt;3</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
