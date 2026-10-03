@@ -331,7 +331,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     }
 
-    elements.drawNoteBtn.addEventListener('click', drawNote);
+    // Expose drawNote globally for inline onclick
+    window.drawNote = drawNote;
+
+    if (elements.drawNoteBtn) elements.drawNoteBtn.addEventListener('click', drawNote);
+    if (elements.digitalJar) elements.digitalJar.addEventListener('click', drawNote);
     elements.shareNoteBtn.addEventListener('click', () => {
         const textToCopy = elements.noteText.textContent;
         navigator.clipboard.writeText(textToCopy).then(() => {

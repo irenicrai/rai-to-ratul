@@ -261,7 +261,7 @@
 
             <div class="jar-interactive-area glass-panel">
                 <div class="jar-visual-container">
-                    <div id="digitalJar" class="digital-jar">
+                    <div id="digitalJar" class="digital-jar" onclick="drawNote()" style="cursor: pointer;" title="Click the jar to draw a note!">
                         <div class="jar-lid"></div>
                         <div class="jar-neck"></div>
                         <div class="jar-body">
@@ -272,7 +272,7 @@
                             <div class="capsule cap-5"><i class="fa-solid fa-face-smile"></i></div>
                         </div>
                     </div>
-                    <button id="drawNoteBtn" class="pill-btn primary glow-btn">
+                    <button id="drawNoteBtn" class="pill-btn primary glow-btn" onclick="drawNote()">
                         <i class="fa-solid fa-hand-holding-sparkles"></i> Open a Capsule Note
                     </button>
                 </div>
