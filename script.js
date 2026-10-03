@@ -295,69 +295,99 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Digital Encouragement Jar Note Drawer ---
+    let isDrawingNote = false;
+
     function drawNote() {
+        if (isDrawingNote) return;
+        isDrawingNote = true;
+
         const noteCard = document.getElementById('noteCard');
         const noteText = document.getElementById('noteText');
         const noteNumber = document.getElementById('noteNumber');
         const noteCategory = document.getElementById('noteCategory');
         const digitalJar = document.getElementById('digitalJar');
 
-        if (!noteText || !noteCard) return;
-
-        // Pick next random note index guaranteed to be different
-        let nextIndex;
-        do {
-            nextIndex = Math.floor(Math.random() * state.notes.length);
-        } while (nextIndex === state.currentNoteIndex && state.notes.length > 1);
-        
-        state.currentNoteIndex = nextIndex;
-        const current = state.notes[state.currentNoteIndex];
-
-        // Update DOM elements instantly
-        if (noteNumber) noteNumber.textContent = state.currentNoteIndex + 1;
-        if (noteCategory) noteCategory.textContent = current.cat;
-        if (noteText) noteText.textContent = `"${current.text}"`;
-
-        // Trigger visual pulse animation
-        noteCard.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease';
-        noteCard.style.transform = 'scale(1.05)';
-        noteCard.style.opacity = '1';
-
-        setTimeout(() => {
-            noteCard.style.transform = 'scale(1)';
-        }, 200);
-
-        // Burst particle hearts from the jar
-        if (digitalJar) {
-            const jarRect = digitalJar.getBoundingClientRect();
-            const jarX = jarRect.left + jarRect.width / 2;
-            const jarY = jarRect.top + 20;
-            for (let i = 0; i < 6; i++) {
-                setTimeout(() => {
-                    createFloatingHeart(jarX + (Math.random() * 80 - 40), jarY);
-                }, i * 60);
-            }
+        if (!noteText || !noteCard) {
+            isDrawingNote = false;
+            return;
         }
 
-        playChimeSound();
+        // Add smooth flip/fade-out animation
+        noteCard.style.transition = 'transform 0.15s ease, opacity 0.15s ease';
+        noteCard.style.transform = 'scale(0.95) translateY(5px)';
+        noteCard.style.opacity = '0.4';
+
+        setTimeout(() => {
+            // Pick next random note index guaranteed to be different
+            let nextIndex;
+            do {
+                nextIndex = Math.floor(Math.random() * state.notes.length);
+            } while (nextIndex === state.currentNoteIndex && state.notes.length > 1);
+            
+            state.currentNoteIndex = nextIndex;
+            const current = state.notes[state.currentNoteIndex];
+
+            // Update DOM elements
+            if (noteNumber) noteNumber.textContent = state.currentNoteIndex + 1;
+            if (noteCategory) noteCategory.textContent = current.cat;
+            if (noteText) noteText.textContent = `"${current.text}"`;
+
+            // Animate card back to full scale with glowing pop effect
+            noteCard.style.transform = 'scale(1.03) translateY(-3px)';
+            noteCard.style.opacity = '1';
+
+            setTimeout(() => {
+                noteCard.style.transform = 'scale(1) translateY(0)';
+                isDrawingNote = false;
+            }, 150);
+
+            // Burst particle hearts from the jar
+            if (digitalJar) {
+                const jarRect = digitalJar.getBoundingClientRect();
+                const jarX = jarRect.left + jarRect.width / 2;
+                const jarY = jarRect.top + 20;
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        createFloatingHeart(jarX + (Math.random() * 80 - 40), jarY);
+                    }, i * 60);
+                }
+            }
+
+            playChimeSound();
+            showToast(`Capsule Note #${state.currentNoteIndex + 1} Drawn! 🌟`, 'fa-hand-holding-sparkles');
+        }, 150);
     }
 
-    // Expose drawNote globally on window for inline onclick
+    // Expose drawNote globally on window
     window.drawNote = drawNote;
 
     const drawBtnEl = document.getElementById('drawNoteBtn');
     const jarEl = document.getElementById('digitalJar');
-    if (drawBtnEl) drawBtnEl.addEventListener('click', drawNote);
-    if (jarEl) jarEl.addEventListener('click', drawNote);
+    if (drawBtnEl) {
+        drawBtnEl.onclick = null; // Clear inline handler to prevent double execution
+        drawBtnEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            drawNote();
+        });
+    }
+    if (jarEl) {
+        jarEl.onclick = null; // Clear inline handler to prevent double execution
+        jarEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            drawNote();
+        });
+    }
 
     // Initial note draw on page load so it's ready
     drawNote();
-    elements.shareNoteBtn.addEventListener('click', () => {
-        const textToCopy = elements.noteText.textContent;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            showToast('Note copied to clipboard!', 'fa-copy');
+    if (elements.shareNoteBtn) {
+        elements.shareNoteBtn.addEventListener('click', () => {
+            const textToCopy = elements.noteText.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('Note copied to clipboard!', 'fa-copy');
+            });
         });
-    });
+    }
 
     // --- One-Tap Preset Text Copier ---
     elements.presetBtns.forEach(btn => {
